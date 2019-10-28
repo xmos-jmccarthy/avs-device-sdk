@@ -902,9 +902,9 @@ int main(int argc, char **argv) {
     }
 
     if (strcmp(argv[1], command_SET_EXTERNAL_GPIO) == 0) {
-        if ((argc != 3) || (atoi(argv[2]) != 0) || (atoi(argv[2]) != 1)) {
+        if (argc != 3) {
             printf("Command '%s' invalid \n", argv[1]);
-            printf("This control has 1 argument : arg 1 : [0-1] (on or off): . Ex : ./[caller] command_SET_EXTERNAL_GPIO 0 \n");
+            printf("This control has 1 argument : arg 1 : [0-1] (on or off): . Ex : ./[caller] SET_EXTERNAL_GPIO 0 \n");
           }
         else {
             set_gpio(argv);
