@@ -7,3 +7,6 @@ target_include_directories(GPIO PUBLIC
     "${GPIO_SOURCE_DIR}/include")
 
 target_link_libraries(GPIO KWD AVSCommon wiringPi)
+
+# install target
+asdk_install()
