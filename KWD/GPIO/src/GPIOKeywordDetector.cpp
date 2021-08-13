@@ -37,6 +37,9 @@ static const std::string TAG("GPIOKeywordDetector");
  */
 #define LX(event) alexaClientSDK::avsCommon::utils::logger::LogEntry(TAG, event)
 
+/// GPIO pin to monitor
+static const int GPIO_PIN = 0;
+
 /// Number of samples to rewind when WW is detected on GPIO
 static const size_t WW_REWIND_SAMPLES = 10000;
 
@@ -111,10 +114,7 @@ static bool isAudioFormatCompatibleWithGPIOWW(avsCommon::utils::AudioFormat audi
     return true;
 }
 
-
-
-
-std::unique_ptr<GPIOKeyWordDetector> GPIOKeyWordDetector::create(
+std::unique_ptr<GPIOKeywordDetector> GPIOKeywordDetector::create(
         std::shared_ptr<AudioInputStream> stream,
         avsCommon::utils::AudioFormat audioFormat,
         std::unordered_set<std::shared_ptr<KeyWordObserverInterface>> keyWordObservers,
@@ -136,7 +136,7 @@ std::unique_ptr<GPIOKeyWordDetector> GPIOKeyWordDetector::create(
         return nullptr;
     }
 
-    std::unique_ptr<GPIOKeyWordDetector> detector(new GPIOKeyWordDetector(
+    std::unique_ptr<GPIOKeywordDetector> detector(new GPIOKeywordDetector(
         stream, keyWordObservers, keyWordDetectorStateObservers, audioFormat));
 
     if (!detector->init()) {
@@ -160,8 +160,8 @@ GPIOKeywordDetector::GPIOKeywordDetector(
 
 GPIOKeywordDetector::~GPIOKeywordDetector() {
     m_isShuttingDown = true;
-    if (m_thread->joinable())
-        m_thread->join();
+    if (m_detectionThread.joinable())
+        m_detectionThread.join();
 }
 
 bool GPIOKeywordDetector::init() {
@@ -184,7 +184,7 @@ bool GPIOKeywordDetector::init() {
     return true;
 }
 
-void GPIOKeyWordDetector::detectionLoop() {
+void GPIOKeywordDetector::detectionLoop() {
     m_beginIndexOfStreamReader = m_streamReader->tell();
     notifyKeyWordDetectorStateObservers(KeyWordDetectorStateObserverInterface::KeyWordDetectorState::ACTIVE);
     std::vector<int16_t> audioDataToPush(m_maxSamplesPerPush);

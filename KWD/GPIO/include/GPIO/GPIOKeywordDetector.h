@@ -42,7 +42,7 @@ using namespace avsCommon::sdkInterfaces;
 class GPIOKeywordDetector : public AbstractKeywordDetector {
 public:
     /**
-     * Creates a @c GPIOKeyWordDetector.
+     * Creates a @c GPIOKeywordDetector.
      *
      * @param stream The stream of audio data. This should be formatted in LPCM encoded with 16 bits per sample and
      * have a sample rate of 16 kHz. Additionally, the data should be in little endian format.
@@ -54,9 +54,9 @@ public:
      * might lead longer delays before receiving keyword detection events. This has been defaulted to 10 milliseconds
      * as it is a good trade off between CPU usage and recognition delay. Additionally, this was the amount used by
      * Sensory in example code.
-     * @return A new @c GPIOKeyWordDetector, or @c nullptr if the operation failed.
+     * @return A new @c GPIOKeywordDetector, or @c nullptr if the operation failed.
      */
-    static std::unique_ptr<GPIOKeyWordDetector> create(
+    static std::unique_ptr<GPIOKeywordDetector> create(
         std::shared_ptr<AudioInputStream> stream,
         avsCommon::utils::AudioFormat audioFormat,
         std::unordered_set<std::shared_ptr<KeyWordObserverInterface>> keyWordObservers,

@@ -20,7 +20,7 @@
 #elif KWD_SENSORY
 #include <Sensory/SensoryKeywordDetector.h>
 #elif KWD_GPIO
-#include <GPIO/GPIOKeyWordDetector.h>
+#include <GPIO/GPIOKeywordDetector.h>
 #endif
 
 #ifdef KWD_KITTAI
