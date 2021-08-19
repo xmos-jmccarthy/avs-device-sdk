@@ -40,8 +40,8 @@ static const std::string TAG("GPIOKeywordDetector");
 /// GPIO pin to monitor
 static const int GPIO_PIN = 0;
 
-/// Number of samples to rewind when WW is detected on GPIO
-static const size_t WW_REWIND_SAMPLES = 10000;
+/// Number of m_maxSamplesPerPush * WW_REWIND_SAMPLES to rewind when WW is detected on GPIO
+static const size_t WW_REWIND_SAMPLES = 10;
 
 /// Wakeword string
 static const std::string WAKEWORD_STRING = "alexa";
@@ -221,8 +221,8 @@ void GPIOKeywordDetector::detectionLoop() {
                 notifyKeyWordObservers(
                     m_stream,
                     WAKEWORD_STRING,
-                    m_beginIndexOfStreamReader - WW_REWIND_SAMPLES,
-                    m_beginIndexOfStreamReader);
+                    (m_streamReader->tell() < (m_maxSamplesPerPush*WW_REWIND_SAMPLES) ? 0 : m_streamReader->tell() - (m_maxSamplesPerPush*WW_REWIND_SAMPLES)),
+                    m_streamReader->tell());
             }
         }
     }
