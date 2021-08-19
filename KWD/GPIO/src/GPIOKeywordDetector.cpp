@@ -19,7 +19,6 @@
 
 #include <AVSCommon/Utils/Logger/Logger.h>
 #include <wiringPi.h>
-#include <unistd.h>
 
 #include "GPIO/GPIOKeywordDetector.h"
 
@@ -189,13 +188,7 @@ void GPIOKeywordDetector::detectionLoop() {
     m_beginIndexOfStreamReader = m_streamReader->tell();
     notifyKeyWordDetectorStateObservers(KeyWordDetectorStateObserverInterface::KeyWordDetectorState::ACTIVE);
     std::vector<int16_t> audioDataToPush(m_maxSamplesPerPush);
-#if 1
-    while(!m_isShuttingDown) {  // IO sanity check
-        int gpioValue = digitalRead(GPIO_PIN);
-        ACSDK_INFO(LX("WW GPIO value is ").d("val", std::to_string(gpioValue)));
-        usleep(500000);
-    }
-#else
+
     while (!m_isShuttingDown) {
         bool didErrorOccur = false;
         auto wordsRead = readFromStream(
@@ -224,6 +217,7 @@ void GPIOKeywordDetector::detectionLoop() {
 
             if (gpioValue == HIGH)
             {
+                ACSDK_INFO(LX("WW detected"));
                 notifyKeyWordObservers(
                     m_stream,
                     WAKEWORD_STRING,
@@ -232,7 +226,6 @@ void GPIOKeywordDetector::detectionLoop() {
             }
         }
     }
-#endif
     m_streamReader->close();
 }
 
