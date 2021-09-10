@@ -19,6 +19,8 @@
 #include <KittAi/KittAiKeyWordDetector.h>
 #elif KWD_SENSORY
 #include <Sensory/SensoryKeywordDetector.h>
+#elif KWD_GPIO
+#include <GPIO/GPIOKeywordDetector.h>
 #endif
 
 #ifdef KWD_KITTAI
@@ -61,6 +63,13 @@ std::unique_ptr<kwd::AbstractKeywordDetector> KeywordDetectorProvider::create(
         keyWordDetectorStateObservers,
         pathToInputFolder + "/spot-alexa-rpi-31000.snsr",
         std::chrono::milliseconds(10));
+
+#elif defined(KWD_GPIO)
+    return kwd::GPIOKeywordDetector::create(
+        stream,
+        audioFormat,
+        keyWordObservers,
+        keyWordDetectorStateObservers);
 #else
     return nullptr;
 #endif
