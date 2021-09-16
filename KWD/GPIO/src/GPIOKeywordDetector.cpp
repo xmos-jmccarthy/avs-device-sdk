@@ -38,7 +38,7 @@ static const std::string TAG("GPIOKeywordDetector");
 #define LX(event) alexaClientSDK::avsCommon::utils::logger::LogEntry(TAG, event)
 
 /// GPIO pin to monitor
-static const int GPIO_PIN = 0;
+static const int GPIO_PIN = 13;
 
 /// Number of m_maxSamplesPerPush * WW_REWIND_SAMPLES to rewind when WW is detected on GPIO
 static const size_t WW_REWIND_SAMPLES = 10;
